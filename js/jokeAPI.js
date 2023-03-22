@@ -1,5 +1,5 @@
 export default
-class joke{
+class Joke{
     constructor(category,flags,joketype,safe){
         this.category = category;
         this.flags = flags;

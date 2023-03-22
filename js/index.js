@@ -1,31 +1,41 @@
 "use strict";
-import joke from './jokeAPI.js';
+import Joke from './jokeAPI.js';
 
 const app = {
     items: [],
     init() {
         this.getData();
-        
+
     },
     getData() {
-        fetch('https://v2.jokeapi.dev/joke/Any?blacklistFlags=nsfw,religious,political,racist,sexist,explicit').then(function(data){
-            return data.json()
-                .then(function (jokeJson) {
-                    console.log(jokeJson);
-                    const joke1 = new joke(jokeJson.category,jokeJson.flags,jokeJson.type,jokeJson.safe);
-                    console.log(joke1);
-                    const firstField = document.getElementsByClassName('item-field')[0];
-                    const secondField = document.getElementsByClassName('item-field')[1];
+        fetch('https://v2.jokeapi.dev/joke/Any?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&amount=10')
+            .then(function (data) {
+                return data.json()
+            })
+            .then(function (jokeJson) {
+                console.log(jokeJson);
 
-                    if (jokeJson.type == "twopart") {
-                        firstField.innerHTML = jokeJson.setup;
-                        secondField.innerHTML = jokeJson.delivery;
-                    } else {
-                        firstField.innerHTML = jokeJson.joke;
-                        secondField.innerHTML = "";
-                    }
+                jokeJson.jokes.forEach(function (jokeJson) {
+                    const joke = new Joke(jokeJson.category, jokeJson.flags, jokeJson.type, jokeJson.safe);
+                    let jokes = [];
+                    app.items.push(joke);
                 })
-        })
+
+                console.log(app.items);
+
+
+                /*const firstField = document.getElementsByClassName('item-field')[0];
+                const secondField = document.getElementsByClassName('item-field')[1];
+
+                if (jokeJson.type == "twopart") {
+                    firstField.innerHTML = jokeJson.setup;
+                    secondField.innerHTML = jokeJson.delivery;
+                } else {
+                    firstField.innerHTML = jokeJson.joke;
+                    secondField.innerHTML = "";
+                }*/
+            })
+
     },
     onSearch() {
     },
@@ -34,4 +44,3 @@ const app = {
 
 }
 app.init()
-console.log(joke);
